@@ -5,7 +5,7 @@ exports.auth = (req, res, next) => {
     const token = req.headers.authorization.split(" ")[1];
     if (!token) {
       return res.status(401).json({
-        success: true,
+        success: false,
         message: "Token missing",
       });
     }
@@ -27,19 +27,38 @@ exports.auth = (req, res, next) => {
   }
 };
 
-exports.admin = (req,res,next) => {
-    try{
-      if(req.user.role== !"admin"){
-        return res.status(401).json({
-            success: "true",
-            message: "protected route admin role can access the page"
-        })
-      }
-    } catch(error){
-        console.log(error);
-        return res.status(403).json({
-            success: "false",
-            message: "user is not authorized to access the page",
-        })
+exports.admin = (req, res, next) => {
+  try {
+    if (req.user.role !== "admin") {
+      return res.status(401).json({
+        success: "true",
+        message: "protected route admin role can access the page",
+      });
     }
-}
+    next();
+  } catch (error) {
+    console.log(error);
+    return res.status(403).json({
+      success: "false",
+      message: "user is not authorized to access the page",
+    });
+  }
+};
+
+exports.superAdmin = (req, res, next) => {
+  try {
+    if (req.user.role !== "superAdmin") {
+      return res.status(401).json({
+        success: "true",
+        message: "protected route only super admins can create the admin",
+      });
+    }
+    next();
+  } catch (error) {
+    console.log(error);
+    return res.status(403).json({
+      success: "false",
+      message: "user is not authorized to access the page",
+    });
+  }
+};
