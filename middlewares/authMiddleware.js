@@ -48,7 +48,7 @@ exports.admin = (req, res, next) => {
 exports.superAdmin = (req, res, next) => {
   try {
     if (req.user.role !== "superAdmin") {
-      return res.status(401).json({
+      return res.status(401).json({  
         success: "true",
         message: "protected route only super admins can create the admin",
       });
@@ -61,4 +61,4 @@ exports.superAdmin = (req, res, next) => {
       message: "user is not authorized to access the page",
     });
   }
-};
+};  

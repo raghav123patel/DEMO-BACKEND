@@ -1,8 +1,12 @@
 const express = require("express");
+const cors = require("cors");
 const app = express();
 require("dotenv").config();
 const PORT = process.env.PORT || 5000;
-app.use(express.json());
+app.use(cors({
+  origin: "*"
+}));
+app.use(express.json()); 
 
 const authRoute = require("./routes/authRoutes");
 app.use("/api/v1/auth", authRoute);
