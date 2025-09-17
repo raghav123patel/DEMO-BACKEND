@@ -58,7 +58,7 @@ exports.login = async(req,res) => {
             message: "provide all credentials",
         })
       }
-      const user = await User.findOne({email});
+      const user = await User.findOne({email}).select("+password");
        if (!user) {
       return res.status(401).json({
         success: false,
@@ -87,7 +87,7 @@ exports.login = async(req,res) => {
       message: "User logged in successfully",
     });
     } catch(error) {
-      console.log(error);
+      console.log(error); 
       return res.status(500).json({
         success: false,
         message: 'Internal Server Error',

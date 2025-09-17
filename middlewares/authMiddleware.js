@@ -21,44 +21,30 @@ exports.auth = (req, res, next) => {
     next();
   } catch (error) {
     return res.status(401).json({
-      success: true,
+      success: false,
       message: "Token invalid",
     });
   }
 };
 
-exports.admin = (req, res, next) => {
-  try {
-    if (req.user.role !== "admin") {
-      return res.status(401).json({
-        success: "true",
-        message: "protected route admin role can access the page",
-      });
-    }
-    next();
-  } catch (error) {
-    console.log(error);
-    return res.status(403).json({
-      success: "false",
-      message: "user is not authorized to access the page",
-    });
-  }
+exports.authorizeRoles = (...allowedRoles) => {
+    return (req, res, next) => {
+        try {
+            if (!allowedRoles.includes(req.user.role)) {
+                return res.status(403).json({
+                    success: false,
+                    message: "Forbidden: Insufficient role"
+                });
+            }
+            next();
+        } catch (error) {
+            console.log(error);
+            return res.status(500).json({
+                success: false,
+                message: "Server error"
+            });
+        }
+    };
 };
 
-exports.superAdmin = (req, res, next) => {
-  try {
-    if (req.user.role !== "superAdmin") {
-      return res.status(401).json({  
-        success: "true",
-        message: "protected route only super admins can create the admin",
-      });
-    }
-    next();
-  } catch (error) {
-    console.log(error);
-    return res.status(403).json({
-      success: "false",
-      message: "user is not authorized to access the page",
-    });
-  }
-};  
+

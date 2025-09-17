@@ -1,8 +1,8 @@
 const express = require("express");
 const router = express.Router();
-const { auth, superAdmin } = require("../middlewares/authMiddleware");
+const { auth, authorizeRoles } = require("../middlewares/authMiddleware");
 const { createAdmin } = require("../controllers/adminController");
 
-router.post("/create", auth, superAdmin, createAdmin);    
+router.post("/create", auth, authorizeRoles('superAdmin'), createAdmin);    
 
 module.exports = router;
